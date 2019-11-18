@@ -2,7 +2,7 @@ from requests import request
 from json import dumps,loads
 import pandas as pd
 from time import sleep
-from datetime import date
+from datetime import datetime
 import os
 
 def make_request (ids = ids, link = 'https://api.vk.com/method/ads.getTargetingStats', token = token):
@@ -47,11 +47,12 @@ def main():
     # https://oauth.vk.com/authorize?client_id=6003800&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope=ads,offline&response_type=token&v=5.103
     with open('token.txt', 'r') as f:
         token = f.read().rstrip('\n')
-    make_request(ids=ids, token=token)
+    make_request(ids=ids, token=token).to_csv(f'stats_{datetime.now().strftime("%y-%d-%m_%H-%M")}.csv', index = False)
 
 
 if __name__ == "__main__":
     main()
+
 
 
 
