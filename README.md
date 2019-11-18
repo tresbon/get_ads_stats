@@ -14,8 +14,9 @@ git clone https://github.com/tresbon/get_ads_stats`
 2. Prepare a ads.csv file like this or remove with another file with the same name:
 
 
-`client_id,account_id,ad_id
-12345,5433231,65345234`
+`client_id,account_id,ad_id`
+
+`12345,5433231,65345234`
 
 
 Order is not important, but column names must be the same!
