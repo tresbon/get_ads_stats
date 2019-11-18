@@ -1,24 +1,57 @@
 from requests import request
-from json import dumps
+from json import dumps,loads
+import pandas as pd
+from time import sleep
+from datetime import date
+import os
 
-with open('','r') as f:
-    ids = f.read()
+def make_request (ids = ids, link = 'https://api.vk.com/method/ads.getTargetingStats', token = token):
+    '''Request recc CPM & CPC'''
 
-with open('token.txt', 'r') as f:
-    token = f.read()
-
-def create_request (link, token, ids):
-
-    link = ''
-
-    data = {
-        'key':'value',
-        'key2':'value2'
+    d = {
+        'ad_id':[],
+        'audience_count':[],
+        'recommended_cpc':[],
+        'recommended_cpm':[]
     }
 
-    rqst = request('POST', link, data)
+    for acc in ids['account_id'].unique():
+        for client in ids[ids['account_id']==acc]['client_id'].unique():
+            for ad in ids[(ids['account_id'] == acc) & (ids['client_id'] == client)]['ad_id'].unique():
 
-    print (rqst.ok)
+                data = {
+                    'account_id':str(acc),
+                    'client_id':str(client),
+                    'ad_id':str(ad),
+                    'link_url':'https://ya.ru',
+                    'link_domain':'ya.ru',
+                    'access_token':token,
+                    'v':'5.103'
+                }
 
-    return 
+                r = request('POST', link, data=data)
+                print (ad, r.ok, r.text)
+                if r.ok:
+                    r = loads(r.text)
+                else:
+                    continue
+                d['ad_id'].append(ad)
+                for key in r['response'].keys():
+                    d[key].append(r['response'][key])
+                sleep (.5)
+    return pd.DataFrame(d)
+
+def main():
+    os.chdir(os.path.dirname(os.path.realpath(__file__)))
+    ids = pd.read_csv('ads_ids.csv')
+    # https://oauth.vk.com/authorize?client_id=6003800&display=page&redirect_uri=https://oauth.vk.com/blank.html&scope=ads,offline&response_type=token&v=5.103
+    with open('token.txt', 'r') as f:
+        token = f.read().rstrip('\n')
+    make_request(ids=ids, token=token)
+
+
+if __name__ == "__main__":
+    main()
+
+
 
