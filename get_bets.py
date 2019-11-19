@@ -19,7 +19,16 @@ def make_request (ids, token, link = 'https://api.vk.com/method/ads.getTargeting
     for acc in ids['account_id'].unique():
         for client in ids[ids['account_id']==acc]['client_id'].unique():
             for ad in ids[(ids['account_id'] == acc) & (ids['client_id'] == client)]['ad_id'].unique():
-                for ad_platform in ('all','desktop','mobile'):
+
+                if 9 in ids[(ids['account_id'] == acc) & (ids['client_id'] == client) & (ids['ad_id'] == ad)]['ad_format']:
+                    ad_platforms = ('all','desktop','mobile')
+                elif 11 in ids[(ids['account_id'] == acc) & (ids['client_id'] == client) & (ids['ad_id'] == ad)]['ad_format']:
+                    ad_platforms = ('all','desktop','mobile')
+                elif 11 in ids[(ids['account_id'] == acc) & (ids['client_id'] == client) & (ids['ad_id'] == ad)]['ad_format']:
+                    ad_platforms = (0,1)
+                else: ad_platforms = [None]
+                
+                for ad_platform in ad_platforms:
 
                     data = {
                         'account_id':str(acc),
