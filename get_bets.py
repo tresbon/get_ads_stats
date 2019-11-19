@@ -4,12 +4,13 @@ import pandas as pd
 from time import sleep
 from datetime import datetime
 import os
-
+    
 def make_request (ids, token, link = 'https://api.vk.com/method/ads.getTargetingStats'):
     '''Request recc CPM & CPC'''
 
     d = {
         'ad_id':[],
+        'ad_platform':[],
         'audience_count':[],
         'recommended_cpc':[],
         'recommended_cpm':[]
@@ -18,27 +19,32 @@ def make_request (ids, token, link = 'https://api.vk.com/method/ads.getTargeting
     for acc in ids['account_id'].unique():
         for client in ids[ids['account_id']==acc]['client_id'].unique():
             for ad in ids[(ids['account_id'] == acc) & (ids['client_id'] == client)]['ad_id'].unique():
+                for ad_platform in ('all','desktop','mobile'):
 
-                data = {
-                    'account_id':str(acc),
-                    'client_id':str(client),
-                    'ad_id':str(ad),
-                    'link_url':'https://ya.ru',
-                    'link_domain':'ya.ru',
-                    'access_token':token,
-                    'v':'5.103'
-                }
+                    data = {
+                        'account_id':str(acc),
+                        'client_id':str(client),
+                        'ad_id':str(ad),
+                        'link_url':'https://ya.ru',
+                        'link_domain':'ya.ru',
+                        'access_token':token,
+                        'ad_platform':ad_platform,
+                        'v':'5.103'
+                    }
 
-                r = request('POST', link, data=data)
-                print (ad, r.ok, r.text)
-                if r.ok:
-                    r = loads(r.text)
-                else:
-                    continue
-                d['ad_id'].append(ad)
-                for key in r['response'].keys():
-                    d[key].append(r['response'][key])
-                sleep (.5)
+                    r = request('POST', link, data=data)
+                    sleep(2)
+                    print (ad, r.ok, r.text)
+                    if r.ok:
+                        r = loads(r.text)
+                        if 'error' in r.keys():
+                            continue
+                    else:
+                        continue
+                    d['ad_id'].append(ad)
+                    d['ad_platform'].append(ad_platform)
+                    for key in r['response'].keys():
+                        d[key].append(r['response'][key])
     return pd.DataFrame(d)
 
 def main():
@@ -52,7 +58,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
