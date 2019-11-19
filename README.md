@@ -13,6 +13,11 @@ git clone https://github.com/tresbon/get_ads_stats`
 
 2. Prepare a ads.csv file like this or remove with another file with the same name:
 
+by script:
+
+`python3 get_ads_ids.py`
+
+by hand:
 
 `client_id,account_id,ad_id`
 
