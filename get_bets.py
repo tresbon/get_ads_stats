@@ -24,7 +24,7 @@ def make_request (ids, token, link = 'https://api.vk.com/method/ads.getTargeting
                     ad_platforms = ('all','desktop','mobile')
                 elif 11 in ids[(ids['account_id'] == acc) & (ids['client_id'] == client) & (ids['ad_id'] == ad)]['ad_format']:
                     ad_platforms = ('all','desktop','mobile')
-                elif 11 in ids[(ids['account_id'] == acc) & (ids['client_id'] == client) & (ids['ad_id'] == ad)]['ad_format']:
+                elif 1  in ids[(ids['account_id'] == acc) & (ids['client_id'] == client) & (ids['ad_id'] == ad)]['ad_format']:
                     ad_platforms = (0,1)
                 else: ad_platforms = [None]
                 
@@ -40,6 +40,8 @@ def make_request (ids, token, link = 'https://api.vk.com/method/ads.getTargeting
                         'ad_platform':ad_platform,
                         'v':'5.103'
                     }
+                    if data['ad_platform'] is None:
+                        del(data['ad_platform'])
 
                     r = request('POST', link, data=data)
                     sleep(2)

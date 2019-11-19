@@ -26,7 +26,8 @@ def get_ads(account_id,token):
     clients = get_clients(account_id,token)
     d = {'account_id':[],
     'client_id':[],
-    'ad_id':[]}
+    'ad_id':[],
+    'ad_format':[]}
     for client in clients:
         for offset_step in range(5):
             link = 'https://api.vk.com/method/ads.getAds'
@@ -42,11 +43,12 @@ def get_ads(account_id,token):
                 r = loads(r.text)
                 if 'error' in r.keys():
                     continue
-                r = [i['id'] for i in r['response']]
-                for ad_id in r:
+                r = [[i['id'],i['ad_format']] for i in r['response']]
+                for ad in r:
                     d['account_id'].append(account_id)
                     d['client_id'].append(client)
-                    d['ad_id'].append(ad_id)
+                    d['ad_id'].append(ad[0])
+                    d['ad_format'].append(ad[1])
         print(client, 'scanned')
         sleep(.5)
     pd.DataFrame(d).to_csv('ads_ids.csv', index=False)
