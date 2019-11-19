@@ -5,7 +5,7 @@ from time import sleep
 from datetime import datetime
 import os
 
-def make_request (ids = ids, link = 'https://api.vk.com/method/ads.getTargetingStats', token = token):
+def make_request (ids, token, link = 'https://api.vk.com/method/ads.getTargetingStats'):
     '''Request recc CPM & CPC'''
 
     d = {
