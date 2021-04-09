@@ -4,6 +4,7 @@ import pandas as pd
 from time import sleep
 from datetime import datetime
 import os
+import collections 
     
 def make_request (ids, token, link = 'https://api.vk.com/method/ads.getTargetingStats'):
     '''Request recc CPM & CPC'''
