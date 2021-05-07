@@ -5,6 +5,7 @@ from time import sleep
 import os
 
 def get_clients(account_id, token):
+    '''gets list of clients via vk.com API'''
     link = 'https://api.vk.com/method/ads.getClients'
     data = {
     'account_id':str(account_id),
@@ -23,6 +24,10 @@ def get_clients(account_id, token):
     return a
 
 def get_ads(account_id,token):
+    '''
+    Gets ads stat for buch of clients
+    Uses sleep for half of second in order to be aquinted with vk API
+    '''
     clients = get_clients(account_id,token)
     d = {'account_id':[],
     'client_id':[],
