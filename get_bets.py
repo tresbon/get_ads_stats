@@ -41,6 +41,7 @@ def make_request (ids, token, link = 'https://api.vk.com/method/ads.getTargeting
                         'ad_platform':ad_platform,
                         'v':'5.103'
                     }
+                    
                     if data['ad_platform'] is None:
                         del(data['ad_platform'])
 
